@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <defs>
+    <linearGradient id="p3Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141416"/>
+      <stop offset="100%" stop-color="#201A18"/>
+    </linearGradient>
+    <linearGradient id="duoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5722"/>
+      <stop offset="100%" stop-color="#BEF264"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="380" rx="20" fill="url(#p3Grad)"/>
+  
+  <!-- Browser header -->
+  <rect x="0" y="0" width="600" height="46" rx="20" fill="#222222"/>
+  <rect x="0" y="24" width="600" height="22" fill="#222222"/>
+  <circle cx="28" cy="23" r="6" fill="#FF5F56"/>
+  <circle cx="48" cy="23" r="6" fill="#FFBD2E"/>
+  <circle cx="68" cy="23" r="6" fill="#27C93F"/>
+  <rect x="96" y="14" width="260" height="18" rx="6" fill="#141414"/>
+  <text x="110" y="27" font-family="'DM Sans', monospace" font-size="10" fill="#888">https://progetto-tre.example.com</text>
+
+  <!-- Editorial Card Graphic -->
+  <circle cx="160" cy="210" r="80" fill="none" stroke="url(#duoGrad)" stroke-width="4" stroke-dasharray="8 6"/>
+  <circle cx="160" cy="210" r="40" fill="url(#duoGrad)" opacity="0.3"/>
+  <text x="160" y="216" text-anchor="middle" font-family="'Syne', sans-serif" font-weight="800" font-size="28" fill="#F3F2EE">03</text>
+
+  <rect x="290" y="110" width="270" height="20" rx="4" fill="url(#duoGrad)"/>
+  <rect x="290" y="145" width="230" height="12" rx="3" fill="#3A3A3A"/>
+  <rect x="290" y="170" width="260" height="12" rx="3" fill="#2C2C2C"/>
+  <rect x="290" y="195" width="190" height="12" rx="3" fill="#2C2C2C"/>
+
+  <rect x="290" y="240" width="110" height="36" rx="18" fill="#FF5722" opacity="0.2" stroke="#FF5722"/>
+  <text x="345" y="262" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" fill="#FF5722" font-weight="600">FULLSTACK</text>
+
+  <rect x="415" y="240" width="110" height="36" rx="18" fill="#BEF264" opacity="0.2" stroke="#BEF264"/>
+  <text x="470" y="262" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="12" fill="#BEF264" font-weight="600">CREATIVE</text>
+  
+  <text x="300" y="325" font-family="'DM Sans', sans-serif" font-size="11" fill="#777">[Anteprima Progetto 3]</text>
+</svg>
