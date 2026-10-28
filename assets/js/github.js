@@ -11,6 +11,14 @@
 
   const USERNAME = 'Albitrix';
 
+  // Mappa opzionale per impostare immagini personalizzate (locali o URL) per ciascun repository.
+  // Se lasciata vuota, viene utilizzata in automatico la Social Preview ufficiale di GitHub.
+  const CUSTOM_PROJECT_IMAGES = {
+    // Esempio:
+    // 'flight-monitor': 'assets/img/flight-monitor.png',
+    // 'new-gen-data-models': 'assets/img/models.jpg',
+  };
+
   const GRADIENTS = [
     '#1E6B5C, #06140f',
     '#8A5A3C, #150d08',
@@ -188,7 +196,8 @@
       const desc = lang === 'it' ? repo.desc_it : repo.desc_en;
       const kind = lang === 'it' ? repo.kind_it : repo.kind_en;
       const repoSlug = repo.repo_slug || (repo.url.includes('github.com/Albitrix/') ? repo.url.split('/').pop() : null);
-      const ogImage = repoSlug ? `https://opengraph.githubassets.com/1/${USERNAME}/${repoSlug}` : '';
+      const customImg = repoSlug && CUSTOM_PROJECT_IMAGES[repoSlug] ? CUSTOM_PROJECT_IMAGES[repoSlug] : null;
+      const ogImage = customImg || (repoSlug ? `https://opengraph.githubassets.com/1/${USERNAME}/${repoSlug}` : '');
 
       return `
         <a href="${repo.url}" target="_blank" rel="noopener noreferrer" class="pj rv is-revealed">
