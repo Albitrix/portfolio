@@ -4,7 +4,7 @@
 Studente Magistrale in Informatica all'Università degli Studi di Milano & Software Developer.  
 *Computer Science Master's Student at the University of Milan & Software Developer.*
 
-[![Live Interactive Portfolio]()](https://albitrix.github.io/portfolio/)
+[Live Interactive Portfolio](https://albitrix.github.io/portfolio/)
 
 ---
 
