@@ -30,6 +30,12 @@
     '#4A4E69, #13141f'
   ];
 
+  // Repositories esterne di altri utenti o organizzazioni di cui Alberto è collaboratore o contributore.
+  // Inserisci i percorsi 'owner/repo', ad esempio: ['unimi/progetto-distribuito', 'azienda/repo-condivisa']
+  const COLLABORATOR_REPOS = [
+    // Inserisci qui le tue repository da collaboratore
+  ];
+
   const ALL_PROJECTS = [
     {
       id: 'flight-monitor',
@@ -62,7 +68,7 @@
       kind_it: 'Enterprise Web App',
       kind_en: 'Enterprise Web App',
       url: 'https://github.com/Albitrix',
-      featured: true
+      featured: false
     },
     {
       id: 'volio',
@@ -73,7 +79,7 @@
       kind_it: 'Frontend Production',
       kind_en: 'Frontend Architecture',
       url: 'https://github.com/Albitrix',
-      featured: true
+      featured: false
     },
     {
       id: 'climate',
@@ -132,14 +138,40 @@
       const data = await res.json();
       if (!Array.isArray(data)) return;
 
-      const pinnedNames = ['flight-monitor', 'new-gen-data-models', 'climatemonitoring', 'portfolio'];
+      const pinnedNames = ['flight-monitor', 'new-gen-data-models'];
+
+      // Fetch external collaborator repositories if configured
+      const collaboratorRepos = [];
+      for (const slug of COLLABORATOR_REPOS) {
+        if (!slug || !slug.includes('/')) continue;
+        try {
+          const cRes = await fetch(`https://api.github.com/repos/${slug}`);
+          if (cRes.ok) {
+            const c = await cRes.json();
+            collaboratorRepos.push({
+              id: c.name.toLowerCase(),
+              name: c.name,
+              stack: `${c.language || 'Software'} · Stars: ${c.stargazers_count}`,
+              desc_it: c.description || 'Repository di collaborazione su GitHub.',
+              desc_en: c.description || 'Collaborator repository on GitHub.',
+              kind_it: 'Collaboratore',
+              kind_en: 'Collaborator',
+              url: c.html_url,
+              featured: false,
+              repo_slug: c.name,
+              stars: c.stargazers_count,
+              forks: c.forks_count
+            });
+          }
+        } catch (_) {}
+      }
 
       // Map incoming GitHub repositories
       const fetched = data
         .filter(r => !r.fork)
         .map(r => {
           const lowerName = r.name.toLowerCase();
-          const isPinned = pinnedNames.some(p => lowerName.includes(p));
+          const isPinned = pinnedNames.some(p => lowerName === p || lowerName.endsWith('/' + p) || lowerName.includes(p));
 
           // Check if already in curated list
           const existing = ALL_PROJECTS.find(p => p.id === lowerName || p.url.toLowerCase().endsWith('/' + lowerName));
@@ -148,7 +180,7 @@
               ...existing,
               stars: r.stargazers_count,
               forks: r.forks_count,
-              featured: isPinned || existing.featured,
+              featured: isPinned,
               repo_slug: r.name
             };
           }
@@ -166,6 +198,13 @@
             repo_slug: r.name
           };
         });
+
+      // Merge collaborator repos if any
+      for (const cRepo of collaboratorRepos) {
+        if (!fetched.some(f => f.id === cRepo.id)) {
+          fetched.push(cRepo);
+        }
+      }
 
       if (fetched.length > 0) {
         // Keep pinned / featured at the front
@@ -223,8 +262,8 @@
     const filterBtns = document.querySelectorAll('.projects-filter-btn');
     filterBtns.forEach(btn => {
       const isPinned = btn.dataset.filter === 'pinned';
-      const pinnedCount = dynamicProjects.filter(p => p.featured).length || 4;
-      const totalCount = dynamicProjects.length || 8;
+      const pinnedCount = dynamicProjects.filter(p => p.featured).length;
+      const totalCount = dynamicProjects.length;
       if (isPinned) {
         btn.textContent = lang === 'it' ? `In primo piano (${pinnedCount})` : `Pinned (${pinnedCount})`;
       } else {
@@ -331,7 +370,7 @@
       const cellDate = new Date(today);
       cellDate.setDate(today.getDate() - daysBack);
 
-      cell.addEventListener('mouseenter', (e) => {
+      function showCellTooltip() {
         const lang = window.PortfolioI18n ? window.PortfolioI18n.getLang() : 'it';
         const dateFormatted = cellDate.toLocaleDateString(lang === 'it' ? 'it-IT' : 'en-US', {
           weekday: 'short',
@@ -349,6 +388,12 @@
         tooltip.style.left = `${rect.left + rect.width / 2}px`;
         tooltip.style.top = `${rect.top - 6}px`;
         tooltip.classList.add('visible');
+      }
+
+      cell.addEventListener('mouseenter', showCellTooltip);
+      cell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showCellTooltip();
       });
 
       cell.addEventListener('mouseleave', () => {
@@ -357,6 +402,10 @@
 
       grid.appendChild(cell);
     }
+
+    document.addEventListener('click', () => {
+      tooltip.classList.remove('visible');
+    });
 
     const reposCountEl = document.getElementById('stat-repos-count');
     const starsCountEl = document.getElementById('stat-stars-count');

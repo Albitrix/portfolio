@@ -566,12 +566,60 @@
     reveals.forEach(el => observer.observe(el));
   }
 
+  function initMobileControlsPopover() {
+    const btn = document.getElementById('nav-settings-btn');
+    const popover = document.getElementById('top-controls');
+    const closeBtn = document.getElementById('top-controls-close-btn');
+    if (!btn || !popover) return;
+
+    function openPopover() {
+      popover.classList.add('is-open');
+      btn.classList.add('active');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+
+    function closePopover() {
+      popover.classList.remove('is-open');
+      btn.classList.remove('active');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (popover.classList.contains('is-open')) {
+        closePopover();
+      } else {
+        openPopover();
+      }
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePopover();
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!popover.contains(e.target) && !btn.contains(e.target)) {
+        closePopover();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && popover.classList.contains('is-open')) {
+        closePopover();
+      }
+    });
+  }
+
   // DOMContentLoaded bootstrap
   document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initCursor();
     initHorizontalTimeline();
     initCvPopover();
+    initMobileControlsPopover();
     initStrictSectionSnapping();
     initNavScrollSpy();
     initScrollReveal();

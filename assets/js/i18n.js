@@ -120,6 +120,11 @@
         eyebrow: 'Il mio pianeta',
         title: 'Tech Skills Universe',
         hint: 'Trascina il pianeta 3D · passa sulle icone per i dettagli',
+        tabLanguages: 'Linguaggi Dev',
+        tabWeb: 'Web & Backend',
+        tabDatabases: 'Database',
+        tabSecurity: 'Security',
+        tabSpoken: 'Lingue Parlate',
         groups: [
           { title: 'LINGUAGGI DI PROGRAMMAZIONE', val: 'TypeScript, JavaScript, Python, Java, C, C++' },
           { title: 'SVILUPPO WEB & BACKEND', val: 'React.js, Node.js, NestJS, Next.js, Apache Kafka, REST APIs, HTML, HTTP/HTTPS, AWS Cognito' },
@@ -246,6 +251,11 @@
         eyebrow: 'My Universe',
         title: 'Tech Skills Universe',
         hint: 'Drag the 3D planet · hover over icons for details',
+        tabLanguages: 'Programming Languages',
+        tabWeb: 'Web & Backend',
+        tabDatabases: 'Databases',
+        tabSecurity: 'Security',
+        tabSpoken: 'Spoken Languages',
         groups: [
           { title: 'PROGRAMMING LANGUAGES', val: 'TypeScript, JavaScript, Python, Java, C, C++' },
           { title: 'WEB & BACKEND DEVELOPMENT', val: 'React.js, Node.js, NestJS, Next.js, Apache Kafka, REST APIs, HTML, HTTP/HTTPS, AWS Cognito' },
@@ -370,6 +380,11 @@
     // Skills
     setText('[data-i18n="skills.eyebrow"]', t.skills.eyebrow);
     setText('[data-i18n="skills.title"]', t.skills.title);
+    setText('[data-i18n="skills.tabLanguages"]', t.skills.tabLanguages);
+    setText('[data-i18n="skills.tabWeb"]', t.skills.tabWeb);
+    setText('[data-i18n="skills.tabDatabases"]', t.skills.tabDatabases);
+    setText('[data-i18n="skills.tabSecurity"]', t.skills.tabSecurity);
+    setText('[data-i18n="skills.tabSpoken"]', t.skills.tabSpoken);
     const hovLabel = document.getElementById('hovLabel');
     if (hovLabel) {
       hovLabel.setAttribute('data-default', t.skills.hint);

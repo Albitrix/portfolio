@@ -252,6 +252,25 @@
 
     window.addEventListener('touchend', onEnd);
 
+    // Mobile Category Tabs controller
+    const tabBtns = document.querySelectorAll('.skills-tab-btn');
+    const skillGroups = document.querySelectorAll('.skills-text-col .skill-group');
+    if (tabBtns.length && skillGroups.length) {
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cat = btn.getAttribute('data-cat');
+          tabBtns.forEach(b => {
+            const isMatch = b === btn;
+            b.classList.toggle('active', isMatch);
+            b.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+          });
+          skillGroups.forEach(grp => {
+            grp.classList.toggle('active', grp.getAttribute('data-cat') === cat);
+          });
+        });
+      });
+    }
+
     // Animation frame loop
     function animate() {
       if (!isDragging) {

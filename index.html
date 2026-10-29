@@ -32,27 +32,42 @@
   </style>
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css?v=2.5" />
 </head>
 <body>
   <div class="root">
     <!-- Custom Magnetic Trailing Cursor -->
     <div class="cur" aria-hidden="true"></div>
 
-    <!-- Top-Right Floating Controls (Language & Theme) -->
-    <div class="top-controls">
-      <button type="button" class="top-control-btn lang-toggle-btn" aria-label="Cambia lingua" title="Switch language">EN</button>
-      <button type="button" class="top-control-btn" id="theme-toggle-btn" aria-label="Cambia tema">☾ Scuro</button>
+    <!-- Top-Right Floating Controls (Language & Theme on Desktop / Popover on Mobile) -->
+    <div class="top-controls" id="top-controls" role="region" aria-label="Preferenze tema e lingua">
+      <div class="top-controls-header">
+        <span class="mobile-nav-brand">albitrix ~ $</span>
+        <button type="button" class="top-controls-close-btn" id="top-controls-close-btn" aria-label="Chiudi preferenze">✕</button>
+      </div>
+      <div class="top-controls-btns">
+        <button type="button" class="top-control-btn lang-toggle-btn" aria-label="Cambia lingua" title="Switch language">EN</button>
+        <button type="button" class="top-control-btn" id="theme-toggle-btn" aria-label="Cambia tema">☾ Scuro</button>
+      </div>
     </div>
 
-    <!-- Fixed Pill Navigation (Left side) -->
-    <nav class="pill" aria-label="Navigazione principale">
-      <a href="#home" class="on" data-i18n="nav.home">Hey</a>
-      <a href="#esperienze" data-i18n="nav.esperienze">Percorso</a>
-      <a href="#progetti" data-i18n="nav.progetti">Progetti</a>
-      <a href="#github" data-i18n="nav.github">GitHub</a>
-      <a href="#skills" data-i18n="nav.skills">Skills</a>
-      <a href="#contatti" data-i18n="nav.contatti">Contatti</a>
+    <!-- Fixed Pill Navigation -->
+    <nav class="pill" id="main-nav" aria-label="Navigazione principale">
+      <div class="pill-scroll-track">
+        <a href="#home" class="on" data-i18n="nav.home">Hey</a>
+        <a href="#esperienze" data-i18n="nav.esperienze">Percorso</a>
+        <a href="#progetti" data-i18n="nav.progetti">Progetti</a>
+        <a href="#github" data-i18n="nav.github">GitHub</a>
+        <a href="#skills" data-i18n="nav.skills">Skills</a>
+        <a href="#contatti" data-i18n="nav.contatti">Contatti</a>
+      </div>
+      <!-- Mobile Preferences Trigger Button -->
+      <button type="button" class="nav-settings-round-btn" id="nav-settings-btn" aria-label="Impostazioni lingua e tema" aria-expanded="false" title="Preferenze">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
     </nav>
 
     <!-- Floating / Docked Interactive Terminal Widget -->
@@ -60,9 +75,18 @@
       <div class="th">
         <i></i><i></i><i></i>
         <span id="term-path" style="margin-left: 8px;">albitrix@portfolio: ~/home</span>
+        <button type="button" class="term-close-btn" id="term-close-btn" aria-label="Chiudi terminale">✕</button>
       </div>
       <div class="tb"><div id="term-lines-content"></div><div id="term-input-row" style="display: none; gap: 8px; align-items: center; margin-top: 0;"><span id="term-prompt" style="color: var(--accent); font-weight: 600; white-space: nowrap;">albitrix@portfolio: ~/home $</span><input type="text" class="ti" spellcheck="false" autocomplete="off" aria-label="Comando terminale" /></div></div>
     </div>
+
+    <!-- Mobile Terminal Backdrop & Floating Action Button -->
+    <div id="term-backdrop" class="term-backdrop" aria-hidden="true"></div>
+    <button type="button" id="term-fab" class="term-mobile-fab" aria-label="Apri terminale interattivo">
+      <span class="fab-code">&gt;_</span>
+      <span class="fab-text">Terminal</span>
+      <span class="fab-dot"></span>
+    </button>
 
     <!-- ===================================================================
          HERO SECTION (#home) - 2-COLUMN SPLIT LAYOUT
@@ -301,7 +325,7 @@
 
         <!-- Filter Pill Buttons for Repositories -->
         <div class="projects-filter-bar" role="tablist" aria-label="Filtra progetti">
-          <button type="button" class="projects-filter-btn active" data-filter="pinned" data-i18n="progetti.filterPinned">In primo piano (4)</button>
+          <button type="button" class="projects-filter-btn active" data-filter="pinned" data-i18n="progetti.filterPinned">In primo piano (2)</button>
           <button type="button" class="projects-filter-btn" data-filter="all" data-i18n="progetti.filterAll">Tutti i repository (8)</button>
         </div>
       </div>
@@ -387,10 +411,19 @@
         </h2>
       </div>
 
-      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 48px;">
+      <div class="skills-layout-grid" style="display: flex; flex-wrap: wrap; align-items: center; gap: 48px;">
+        <!-- Mobile Category Tabs (visible only on <= 960px) -->
+        <div class="skills-mobile-tabs" id="skills-mobile-tabs" role="tablist">
+          <button type="button" class="skills-tab-btn active" data-cat="languages" role="tab" aria-selected="true" data-i18n="skills.tabLanguages">Linguaggi Dev</button>
+          <button type="button" class="skills-tab-btn" data-cat="frameworks" role="tab" aria-selected="false" data-i18n="skills.tabWeb">Web &amp; Backend</button>
+          <button type="button" class="skills-tab-btn" data-cat="databases" role="tab" aria-selected="false" data-i18n="skills.tabDatabases">Database</button>
+          <button type="button" class="skills-tab-btn" data-cat="security" role="tab" aria-selected="false" data-i18n="skills.tabSecurity">Security</button>
+          <button type="button" class="skills-tab-btn" data-cat="spoken" role="tab" aria-selected="false" data-i18n="skills.tabSpoken">Lingue Parlate</button>
+        </div>
+
         <!-- Left: Categories & Active Hover Tooltip -->
-        <div class="rv" style="flex: 1 1 340px; display: flex; flex-direction: column; gap: 26px;">
-          <div class="skill-group">
+        <div class="skills-text-col rv" style="flex: 1 1 340px; display: flex; flex-direction: column; gap: 26px;">
+          <div class="skill-group active" data-cat="languages">
             <div class="mono skill-group-title" style="font-size: 13px; color: var(--accent); margin-bottom: 4px;">
               LINGUAGGI DI PROGRAMMAZIONE
             </div>
@@ -399,7 +432,7 @@
             </div>
           </div>
 
-          <div class="skill-group">
+          <div class="skill-group" data-cat="frameworks">
             <div class="mono skill-group-title" style="font-size: 13px; color: var(--accent); margin-bottom: 4px;">
               SVILUPPO WEB &amp; BACKEND
             </div>
@@ -408,7 +441,7 @@
             </div>
           </div>
 
-          <div class="skill-group">
+          <div class="skill-group" data-cat="databases">
             <div class="mono skill-group-title" style="font-size: 13px; color: var(--accent); margin-bottom: 4px;">
               DATABASE &amp; SISTEMI
             </div>
@@ -417,7 +450,7 @@
             </div>
           </div>
 
-          <div class="skill-group">
+          <div class="skill-group" data-cat="security">
             <div class="mono skill-group-title" style="font-size: 13px; color: var(--accent); margin-bottom: 4px;">
               CYBERSECURITY
             </div>
@@ -426,7 +459,7 @@
             </div>
           </div>
 
-          <div class="skill-group">
+          <div class="skill-group" data-cat="spoken">
             <div class="mono skill-group-title" style="font-size: 13px; color: var(--accent); margin-bottom: 4px;">
               LINGUE PARLATE
             </div>
@@ -442,7 +475,7 @@
         </div>
 
         <!-- Right: Interactive 3D Sphere with Official SVG Icons -->
-        <div style="flex: 1 1 480px; min-width: 0; position: relative;">
+        <div class="skills-stage-col" style="flex: 1 1 480px; min-width: 0; position: relative;">
           <!-- Floating Tooltip directly attached to cursor -->
           <div id="planet-floating-tooltip" class="planet-tooltip" aria-hidden="true"></div>
 
@@ -474,7 +507,7 @@
         </p>
 
         <!-- Social Buttons in their Official Brand Colors & Download CV -->
-        <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; align-items: center;">
+        <div class="contatti-buttons-wrap">
           <!-- Single CV Download Button with Language Selection Popover -->
           <div class="cv-dropdown-wrapper">
             <button type="button" class="btn btn-download-cv" id="cv-main-btn" aria-haspopup="true" aria-expanded="false">
@@ -500,23 +533,26 @@
             <span>alberto.ferrari2002@gmail.com</span>
           </a>
 
-          <!-- GitHub -->
-          <a class="btn btn-social-github" href="https://github.com/Albitrix" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 2px;"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-            <span>GitHub ↗</span>
-          </a>
+          <!-- Socials Row (clean 3-col grid on mobile) -->
+          <div class="contatti-socials-row">
+            <!-- GitHub -->
+            <a class="btn btn-social-github" href="https://github.com/Albitrix" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 2px;"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+              <span>GitHub ↗</span>
+            </a>
 
-          <!-- LinkedIn -->
-          <a class="btn btn-social-linkedin" href="https://www.linkedin.com/in/alberto-ferrari-18111529b" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 2px;"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.2a1.6 1.6 0 0 0-1.6 1.6 1.6 1.6 0 0 0 1.6 1.6 1.6 1.6 0 0 0 1.6-1.6c0-.88-.72-1.6-1.6-1.6z"/></svg>
-            <span>LinkedIn ↗</span>
-          </a>
+            <!-- LinkedIn -->
+            <a class="btn btn-social-linkedin" href="https://www.linkedin.com/in/alberto-ferrari-18111529b" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 2px;"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.2a1.6 1.6 0 0 0-1.6 1.6 1.6 1.6 0 0 0 1.6 1.6 1.6 1.6 0 0 0 1.6-1.6c0-.88-.72-1.6-1.6-1.6z"/></svg>
+              <span>LinkedIn ↗</span>
+            </a>
 
-          <!-- Instagram -->
-          <a class="btn btn-social-instagram" href="https://instagram.com/alby_ferra" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 2px;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            <span>Instagram ↗</span>
-          </a>
+            <!-- Instagram -->
+            <a class="btn btn-social-instagram" href="https://instagram.com/alby_ferra" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 2px;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <span>Instagram ↗</span>
+            </a>
+          </div>
         </div>
 
         <p class="mono" style="margin: 36px 0 0; color: var(--muted); font-size: 13.5px;">
@@ -527,10 +563,10 @@
   </div>
 
   <!-- Scripts -->
-  <script src="assets/js/i18n.js?v=2.3"></script>
-  <script src="assets/js/terminal.js?v=2.3"></script>
-  <script src="assets/js/planet.js?v=2.3"></script>
-  <script src="assets/js/github.js?v=2.3"></script>
-  <script src="assets/js/main.js?v=2.3"></script>
+  <script src="assets/js/i18n.js?v=2.5"></script>
+  <script src="assets/js/terminal.js?v=2.5"></script>
+  <script src="assets/js/planet.js?v=2.5"></script>
+  <script src="assets/js/github.js?v=2.5"></script>
+  <script src="assets/js/main.js?v=2.5"></script>
 </body>
 </html>

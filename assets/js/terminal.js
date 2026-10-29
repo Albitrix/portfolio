@@ -31,8 +31,50 @@
     const pathSpan = document.getElementById('term-path');
     const promptSpan = document.getElementById('term-prompt');
     const header = term ? term.querySelector('.th') : null;
+    const fab = document.getElementById('term-fab');
+    const backdrop = document.getElementById('term-backdrop');
+    const closeBtn = document.getElementById('term-close-btn');
 
     if (!term) return;
+
+    // Mobile drawer state
+    let isDrawerOpen = false;
+
+    function openDrawer() {
+      isDrawerOpen = true;
+      term.classList.add('is-drawer');
+      if (backdrop) backdrop.classList.add('visible');
+      if (fab) fab.classList.remove('visible');
+      term.style.removeProperty('left');
+      term.style.removeProperty('top');
+      term.style.removeProperty('width');
+      term.style.removeProperty('height');
+      term.style.opacity = '1';
+      term.style.pointerEvents = 'auto';
+      if (ti) {
+        setTimeout(() => ti.focus(), 120);
+      }
+    }
+
+    function closeDrawer() {
+      isDrawerOpen = false;
+      term.classList.remove('is-drawer');
+      if (backdrop) backdrop.classList.remove('visible');
+      if (window.innerWidth <= 960) {
+        term.style.opacity = '0';
+        term.style.pointerEvents = 'none';
+        if (fab) fab.classList.add('visible');
+      }
+    }
+
+    if (fab) fab.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isDrawerOpen) {
+        closeDrawer();
+      }
+    });
 
     // Persistent command history & scroll lock
     let historyLines = [];
@@ -484,20 +526,55 @@
 
         const r = tspace.getBoundingClientRect();
 
-        // Docked dimensions in subsequent sections (440px wide x 260px high)
-        const dw = Math.min(440, vw - 32);
-        const dh = 260;
-        const dl = vw - dw - 24;
-        const dt = vh - dh - 24;
-
-        if (vw <= 700 && t > 0.5) {
-          // On mobile bottom corner
-          term.style.left = `${dl}px`;
-          term.style.top = `${dt}px`;
-          term.style.width = `${dw}px`;
-          term.style.height = `180px`;
-          term.style.fontSize = `11px`;
+        if (vw <= 960) {
+          // Mobile / Tablet Responsive Mode
+          if (isDrawerOpen) {
+            if (t < 0.5) {
+              closeDrawer();
+            } else {
+              term.style.removeProperty('left');
+              term.style.removeProperty('top');
+              term.style.removeProperty('width');
+              term.style.removeProperty('height');
+              term.style.opacity = '1';
+              term.style.pointerEvents = 'auto';
+              term.style.fontSize = '12px';
+            }
+          } else {
+            if (t < 0.65) {
+              // In Hero: natural inline flow over tspace
+              term.style.left = `${r.left}px`;
+              term.style.top = `${r.top}px`;
+              term.style.width = `${r.width}px`;
+              term.style.height = `${r.height}px`;
+              term.style.fontSize = '12px';
+              term.style.opacity = '1';
+              term.style.pointerEvents = 'auto';
+              if (fab) fab.classList.remove('visible');
+            } else {
+              // In subsequent sections: hide bulky terminal, reveal sleek FAB
+              term.style.opacity = '0';
+              term.style.pointerEvents = 'none';
+              if (fab) fab.classList.add('visible');
+            }
+          }
         } else {
+          // DESKTOP 16:9 MODE (vw > 960px): 100% UNCHANGED, FULL DOCKING GLIDE
+          if (isDrawerOpen) {
+            closeDrawer();
+          }
+          if (fab) fab.classList.remove('visible');
+          if (backdrop) backdrop.classList.remove('visible');
+          term.classList.remove('is-drawer');
+          term.style.opacity = '1';
+          term.style.pointerEvents = 'auto';
+
+          // Docked dimensions in subsequent sections (440px wide x 260px high)
+          const dw = Math.min(440, vw - 32);
+          const dh = 260;
+          const dl = vw - dw - 24;
+          const dt = vh - dh - 24;
+
           // Linear constant speed glide
           term.style.left = `${lerp(r.left, dl, t)}px`;
           term.style.top = `${lerp(r.top, dt, t)}px`;
